@@ -1,5 +1,8 @@
 const express = require('express')
 const logger = require('morgan');
+const mongoose = require('mongoose');
+
+const Pizza = require('./models/Pizza.model')
 
 const pizzasArr = require('./data/pizzas')
 
@@ -18,6 +21,18 @@ app.use(express.json());
 
 
 
+
+//
+// Connect to the DB
+//
+
+mongoose.connect("mongodb://127.0.0.1:27017/express-restaurant")
+    .then(x => console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`))
+    .catch(err => console.error("Error connecting to mongo", err));
+
+
+
+
 // GET /
 app.get('/', (req, res, next) => {
     console.log("we received a GET request for the HOME page...");
@@ -32,6 +47,24 @@ app.get('/contact', (req, res, next) => {
     console.log("we received a GET request for the CONTACT page...");
     res.sendFile(__dirname + "/views/contact.html")
 })
+
+
+// POST /pizzas -- Create a new pizza
+app.post('/pizzas', (req, res, next) => {
+
+    const newPizza = req.body
+
+    Pizza.create(newPizza)
+        .then((pizzaFromDB) => {
+            res.status(201).json(pizzaFromDB)
+        })
+        .catch((err) => {
+            console.log("Error creating a new pizza in the DB...")
+            console.log(err)
+            res.status(500).json({ error: "Error creating a new pizza in the DB..." })
+        })
+})
+
 
 
 // GET /pizzas
