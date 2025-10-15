@@ -4,7 +4,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 mongoose.set('runValidators', true)
 
-const Pizza = require('./models/Pizza.model')
+const Pizza = require('./models/Pizza.model');
+const Cook = require('./models/Cook.model');
 
 const app = express()
 
@@ -145,6 +146,25 @@ app.delete("/pizzas/:pizzaId", (req, res, next) => {
             res.status(500).json({ error: "Failed to delete a pizza" });
         })
 })
+
+
+
+// POST /cooks -- Create a new cook
+app.post('/cooks', (req, res, next) => {
+
+    const newCook = req.body
+
+    Cook.create(newCook)
+        .then((cookFromDB) => {
+            res.status(201).json(cookFromDB)
+        })
+        .catch((error) => {
+            console.log("Error creating a new cook in the DB...");
+            console.log(error);
+            res.status(500).json({ error: "Failed to create a new cook" })
+        })
+})
+
 
 
 
