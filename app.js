@@ -18,47 +18,6 @@ app.use(express.json());
 
 
 
-//
-// Example of middleware functions
-//
-function customMiddleware1(req, res, next) {
-    console.log('middleware 1...');
-    next()
-}
-
-function customMiddleware2(req, res, next) {
-    console.log('middleware 2...');
-    next()
-}
-
-
-app.use(customMiddleware1)
-app.use(customMiddleware2)
-
-
-//
-// Creating routes in Express:
-//
-// app.get(path, code)
-// app.post(path, code)
-// app.put(path, code)
-// app.delete(path, code)
-//
-//
-// Example:
-//
-// app.get(path, (req, res, next) => {})
-// 
-
-
-//
-// Some methods to send a response in Express:
-//
-// - res.send()
-// - res.sendFile()
-// - res.json()
-
-
 // GET /
 app.get('/', (req, res, next) => {
     console.log("we received a GET request for the HOME page...");
